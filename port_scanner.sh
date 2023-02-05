@@ -2,6 +2,7 @@
 
 # Prompt user for target IP address
 read -p "Enter target IP address: " target
+printf "\n"
 
 # Create a folder with the target IP address
 folder="$target"
@@ -30,6 +31,9 @@ grep -E "open.*[0-9]+/tcp" "$folder/nmap_scan_results.txt" | awk '{print $1 " " 
 # Create the file searchsploit_results.txt
 touch "$folder/searchsploit_results.txt"
 
+# Create the file security_headers_results.txt
+touch "$folder/security_headers_results.txt"
+
 # Loop through each open port and search for exploits in searchsploit
 while read line; do
   port=$(echo $line | awk '{print $1}')
@@ -42,6 +46,7 @@ while read line; do
     echo "$result" >> "$folder/searchsploit_results.txt"
   fi
 done < "$folder/open_ports.txt"
+printf "\r[✔️] Folders created...Please wait\n"
 
 # Loop through the specified ports and check for exploits
 for port in $(echo 21 22 25 26 53 80 110 143 443 465 587 993 995 2222 3306 5432); do
@@ -55,12 +60,8 @@ for port in $(echo 21 22 25 26 53 80 110 143 443 465 587 993 995 2222 3306 5432)
     echo "$result" >> "$folder/searchsploit_results.txt"
   fi
 done
+printf "\r[✔️] All Complete\n\n"
 
-# Count the number of vulnerabilities found
-count=$(grep -c "Results found" "$folder/searchsploit_results.txt")
+echo "Please check the folder named" $folder "for more details"
 
-# Output the count of vulnerabilities found
-echo "Number of vulnerabilities found: $count"
 
-# Automatically open the folder
-# xdg-open
