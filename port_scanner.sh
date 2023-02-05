@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Prompt user for target IP address
 read -p "Enter target IP address: " target
 
@@ -10,7 +11,18 @@ fi
 mkdir "$folder"
 
 # Run nmap scan and save output to a file
-nmap -sV $target > "$folder/nmap_scan_results.txt"
+nmap -sV $target > "$folder/nmap_scan_results.txt" &
+pid=$!
+spin='-\|/'
+
+i=0
+while kill -0 $pid 2>/dev/null
+do
+  i=$(( (i+1) %4 ))
+  printf "\r[%c] Scan in progress...Please wait" "${spin:$i:1}"
+  sleep .1
+done
+printf "\r[✔️] Scan complete\n"
 
 # Extract open port information from nmap scan results
 grep -E "open.*[0-9]+/tcp" "$folder/nmap_scan_results.txt" | awk '{print $1 " " $NF}' > "$folder/open_ports.txt"
@@ -51,4 +63,4 @@ count=$(grep -c "Results found" "$folder/searchsploit_results.txt")
 echo "Number of vulnerabilities found: $count"
 
 # Automatically open the folder
-# xdg-open "$folder"
+# xdg-open
