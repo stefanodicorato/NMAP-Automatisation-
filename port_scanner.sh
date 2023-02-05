@@ -138,17 +138,24 @@ while IFS= read -r line; do
 done < "$folder/nmap_scan_results.txt"
 echo "" >> $report
 
+# Remove the string "Pure-FTPd" from the results
+sed 's/Pure-FTPd//g' "$folder/searchsploit_results.txt" > "$folder/searchsploit_results_modified.txt"
+
+# Remove the string "Pure-FTPd" from the results
+grep -v "Pure-FTPd" "$folder/searchsploit_results.txt" > "$folder/searchsploit_results_modified.txt"
+
 # Add Exploit Search Results section
 echo "## Exploit Search Results" >> $report
 echo "" >> $report
 echo "The following results were found in the exploit search:" >> $report
 echo "" >> $report
-cat "$folder/searchsploit_results.txt" >> $report
+cat "$folder/searchsploit_results_modified.txt" >> $report
+
+
 
 # Add completion message
 printf "\n\n[✔️] Completed\n\n"
 echo "Please check the file named $report for more details"
-
 
 
 
