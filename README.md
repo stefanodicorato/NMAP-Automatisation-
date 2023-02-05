@@ -3,7 +3,7 @@ This bash script provides a security audit of a given IP address. It runs an nma
 
 ### Getting Started
 
-####This script is a bash script that performs various security scans on a target IP address specified by the user. The script does the following:
+#### This script is a bash script that performs various security scans on a target IP address specified by the user. The script does the following:
 
 - Prompts the user to enter a target IP address.
 - Creates a folder with the target IP address as its name.
